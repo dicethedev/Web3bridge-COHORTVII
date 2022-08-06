@@ -118,10 +118,19 @@ contract Energy{
         require(_to == msg.sender, "not spender");
         uint allowanceBalance = _allowance[from][_to];
         require(allowanceBalance >= amount, "no allowance for you");
+ 
+        //Get amount of token to burn
         uint burnableToken = _burn(amount);
+         
+         // Deduct burnable amount from amount
         uint transferrable = amount - burnableToken;
+
         _allowance[from][_to] -= amount;
-        _balance[from] -= transferrable;
+
+        _balance[from] -= amount;
+
         _balance[_to] += transferrable;
+        
+        emit _transfer(from, _to, amount);
     }
 }
